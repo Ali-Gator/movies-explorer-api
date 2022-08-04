@@ -1,6 +1,7 @@
-const { NODE_ENV, JWT_SECRET } = process.env;
+const { NODE_ENV, JWT_SECRET, MONGO_DB_URL } = process.env;
 module.exports = {
-  DEFAULT_PORT: NODE_ENV === 'production' ? 3000 : 3001,
+  DEFAULT_PORT: 3000,
+  DB_ADDRESS: NODE_ENV === 'production' ? MONGO_DB_URL : 'mongodb://localhost:27017/moviesdb',
   SECRET: NODE_ENV === 'production' ? JWT_SECRET : 'dev-secret',
   BAD_REQUEST_ERR: 400,
   NO_VALIDATE: 'Bad request. Check all fields for validity',
@@ -8,7 +9,7 @@ module.exports = {
   UNAUTHORIZED_BAD_CREDENTIALS: 'Email and/or password are wrong',
   UNAUTHORIZED_MESSAGE: 'You have to sign-in first',
   FORBIDDEN_ERR: 403,
-  FORBIDDEN_DELETE_MOVIE: 'You can delete ONLY yours movies',
+  FORBIDDEN_DELETE_MOVIE: 'You can delete ONLY your movies',
   NOT_FOUND_ERR: 404,
   NOT_FOUND_USER: 'User is not found',
   NOT_FOUND_MOVIE: 'Movie is not found',

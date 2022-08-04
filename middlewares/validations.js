@@ -27,8 +27,8 @@ const validateMongoIdParam = celebrate({
 const validateUserBody = celebrate({
   body: Joi.object().keys({
     email: Joi.string().required().email(),
-    password: Joi.string().required(),
-    name: Joi.string().min(2).max(30),
+    password: Joi.string().required().min(8),
+    name: Joi.string().required().min(2).max(30),
   }),
 });
 
@@ -39,9 +39,17 @@ const validateProfileBody = celebrate({
   })
 });
 
+const validateAuth = celebrate({
+  body: Joi.object().keys({
+    email: Joi.string().email().required(),
+    password: Joi.string().required().min(8),
+  })
+});
+
 module.exports = {
   validateMovieBody,
   validateMongoIdParam,
   validateProfileBody,
   validateUserBody,
+  validateAuth
 };

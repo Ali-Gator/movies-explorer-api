@@ -20,7 +20,7 @@ const getCurrentUser = async (req, res, next) => {
 
 const patchUserProfile = async (req, res, next) => {
   try {
-    const { email, name } = req.body;
+    const {email, name} = req.body;
     const userId = req.user._id;
     const user = await User.findByIdAndUpdate(userId, {
       email,
@@ -42,10 +42,10 @@ const patchUserProfile = async (req, res, next) => {
 
 const createUser = async (req, res, next) => {
   try {
-    const { email, name, password } = req.body;
+    const {email, name, password} = req.body;
     const passwordHashed = await bcrypt.hash(password, 10);
-    await User.create({ name, email, password: passwordHashed });
-    res.send({ name, email });
+    await User.create({name, email, password: passwordHashed});
+    res.send({name, email});
   } catch (e) {
     if (e.name === 'ValidationError') {
       next(new BadRequestError(NO_VALIDATE));
@@ -59,15 +59,14 @@ const createUser = async (req, res, next) => {
 
 const login = async (req, res, next) => {
   try {
-    console.log('123');
-    const { email, password } = req.body;
-    const user = User.findUserByCredentials(email, password);
+    const {email, password} = req.body;
+    const user = await User.findUserByCredentials(email, password);
     const token = jwt.sign(
-      { _id: user._id },
+      {_id: user._id},
       SECRET,
-      { expiresIn: '7d' },
+      {expiresIn: '7d'},
     );
-    res.send({ token });
+    res.send({token});
   } catch (e) {
     next(e);
   }

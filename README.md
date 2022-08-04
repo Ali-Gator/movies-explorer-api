@@ -2,5 +2,4 @@
 
 ### Server domain
 
-
 ### Public IPv4
