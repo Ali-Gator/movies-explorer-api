@@ -1,9 +1,13 @@
 const User = require('../models/user');
-const {NOT_FOUND_USER, NO_VALIDATE} = require('../utils/constants');
+const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
+const {NOT_FOUND_USER, NO_VALIDATE, CONFLICT_EMAIL} = require('../utils/constants');
 const NotFoundError = require('../errors/not-found-err');
 const BadRequestError = require('../errors/bad-request');
+const ConflictError = require('../errors/conflict');
+const {NODE_ENV, JWT_SECRET} = process.env;
 
-module.exports.getCurrentUser = async (req, res, next) => {
+const getCurrentUser = async (req, res, next) => {
   try {
     const user = await User.findById(req.user._id);
     if (!user) throw new NotFoundError(NOT_FOUND_USER);
@@ -13,7 +17,7 @@ module.exports.getCurrentUser = async (req, res, next) => {
   }
 };
 
-module.exports.patchUserProfile = async (req, res, next) => {
+const patchUserProfile = async (req, res, next) => {
   try {
     const {email, name} = req.body;
     const userId = req.user._id;
@@ -34,4 +38,43 @@ module.exports.patchUserProfile = async (req, res, next) => {
       next(e);
     }
   }
+};
+
+const createUser = async (req, res, next) => {
+  try {
+    const {email, name, password} = req.body;
+    const passwordHashed = await bcrypt.hash(password, 10);
+    await User.create({name, email, password: passwordHashed});
+    res.send({name, email});
+  } catch (e) {
+    if (e.name === 'ValidationError') {
+      next(new BadRequestError(NO_VALIDATE));
+    } else if (e.code === 11000) {
+      next(new ConflictError(CONFLICT_EMAIL));
+    } else {
+      next(e);
+    }
+  }
+};
+
+const login = async (req, res, next) => {
+  try {
+    const {email, password} = req.body;
+    const user = User.findUserByCredentials(email, password);
+    const token = jwt.sign(
+      {_id: user._id},
+      NODE_ENV === 'production' ? JWT_SECRET : 'dev-secret',
+      {expiresIn: '7d'}
+    );
+    res.send({token});
+  } catch (e) {
+    next(e);
+  }
+};
+
+module.exports = {
+  getCurrentUser,
+  patchUserProfile,
+  createUser,
+  login
 };
