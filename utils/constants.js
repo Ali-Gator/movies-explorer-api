@@ -13,7 +13,7 @@ module.exports = {
   NOT_FOUND_ERR: 404,
   NOT_FOUND_USER: 'User is not found',
   NOT_FOUND_MOVIE: 'Movie is not found',
-  NOT_FOUND_PATH: 'No such path',
+  NOT_FOUND_PATH: 'No such rout. Check method and/or path',
   CONFLICT_ERR: 409,
   CONFLICT_EMAIL: 'Email is already used',
   SERVER_ERR_MESSAGE: 'Server error',
