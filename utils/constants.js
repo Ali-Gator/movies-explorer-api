@@ -19,7 +19,7 @@ module.exports = {
   SERVER_ERR_MESSAGE: 'Server error',
   ALLOWED_CORS: [
     'http://127.0.0.1:3001',
-    'http://mesto-ali.nomoredomains.xyz',
-    'https://mesto-ali.nomoredomains.xyz',
+    'http://movie.nomoredomains.sbs',
+    'https://movie.nomoredomains.sbs',
   ],
 };
