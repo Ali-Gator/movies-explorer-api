@@ -1,6 +1,5 @@
-//  signup
-// validateAuthentication signin
 const {celebrate, Joi} = require('celebrate');
+const {URL_REGEXP} = require('../utils/constants');
 
 const validateMovieBody = celebrate({
   body: Joi.object().keys({
@@ -9,12 +8,12 @@ const validateMovieBody = celebrate({
     duration: Joi.number().required(),
     year: Joi.string().required(),
     description: Joi.string().required(),
-    image: Joi.string().uri().required(),
-    trailerLink: Joi.string().uri().required(),
+    image: Joi.string().pattern(URL_REGEXP).required(),
+    trailerLink: Joi.string().pattern(URL_REGEXP).required(),
     nameRU: Joi.string().required(),
     nameEN: Joi.string().required(),
-    thumbnail: Joi.string().uri().required(),
-    movieId: Joi.string().required(),
+    thumbnail: Joi.string().pattern(URL_REGEXP).required(),
+    movieId: Joi.number().required(),
   }),
 });
 
@@ -27,7 +26,7 @@ const validateMongoIdParam = celebrate({
 const validateUserBody = celebrate({
   body: Joi.object().keys({
     email: Joi.string().required().email(),
-    password: Joi.string().required().min(8),
+    password: Joi.string().required(),
     name: Joi.string().required().min(2).max(30),
   }),
 });

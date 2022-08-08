@@ -18,14 +18,14 @@ mongoose.connect(DB_ADDRESS).catch(() => {
   throw new Error('Mongoose connection error');
 });
 
-app.use(helmet());
+app.use(requestLogger);
 app.use(rateLimiter);
+app.use(helmet());
 app.use(cors({origin: ALLOWED_CORS, credentials: true}));
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
 
-app.use(requestLogger);
 app.use(routes);
 
 app.use(errorLogger);

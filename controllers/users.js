@@ -34,6 +34,8 @@ const patchUserProfile = async (req, res, next) => {
   } catch (e) {
     if (e.name === 'ValidationError') {
       next(new BadRequestError(NO_VALIDATE));
+    } else if (e.code === 11000) {
+      next(new ConflictError(CONFLICT_EMAIL));
     } else {
       next(e);
     }
